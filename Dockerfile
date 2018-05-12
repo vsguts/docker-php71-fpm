@@ -3,6 +3,16 @@ FROM ubuntu:16.04
 LABEL maintainer="vsguts@gmail.com"
 LABEL Name=php71-fpm
 
+# Defaultts variables
+ENV DEBIAN_FRONTEND=noninteractive \
+    COMPOSER_HOME=/root/composer \
+    PATH=/root/composer/vendor/bin:$PATH \
+    COMPOSER_ALLOW_SUPERUSER=1 \
+    XDEBUG_REMOTE_ENABLE=1 \
+    XDEBUG_REMOTE_AUTO_START=1 \
+    XDEBUG_REMOTE_PORT=9000 \
+    XDEBUG_REMOTE_HOST=""
+
 # base packages
 RUN apt-get -y update && apt-get install -y \
     apt-utils \
@@ -21,9 +31,10 @@ RUN apt-get -y update && apt-get install -y \
     logrotate \
     software-properties-common
 
-# php repo
+# PHP repo
 RUN LC_ALL=C.UTF-8 apt-add-repository -y ppa:ondrej/php
 
+# Main part
 RUN apt-get update -y && apt-get -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" install -y -f --no-install-recommends \
     unzip \
     bzip2 \
@@ -83,13 +94,15 @@ RUN apt-get update -y && apt-get -o Dpkg::Options::="--force-confdef" -o Dpkg::O
     nodejs \
     npm
 
-# node dependencies
+# Node dependencies
 RUN ln -s /usr/bin/nodejs /usr/bin/node && npm install -g \
     less \
     casperjs
 
+# Custom dependencies
 COPY ./installers /installers
 RUN find /installers/ -type f -regex ".+sh" | xargs chmod +x
+RUN bash /installers/goreplace.sh
 RUN bash /installers/phantomjs.sh
 RUN bash /installers/wkhtmltox.sh
 
@@ -97,6 +110,15 @@ RUN bash /installers/wkhtmltox.sh
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer && \
     chmod +x /usr/local/bin/composer && \
     composer --version --no-ansi
+
+# Disable PHP-mods
+RUN phpdismod -v 7.1 apcu_bc && \
+    phpdismod -v 7.1 apcu && \
+    phpdismod -v 7.1 mongodb && \
+    phpdismod -v 7.1 xdebug
+
+# PHP socket fix
+RUN mkdir -p /run/php
 
 COPY ./configs/supervisor /etc/supervisor
 COPY ./configs/logrotate.conf /etc/logrotate.conf
@@ -106,8 +128,8 @@ COPY ./entrypoint.sh /entrypoint.sh
 COPY ./entrypoint.d /entrypoint.d
 RUN chmod +x /entrypoint.sh
 
-# PHP socket fix
-RUN mkdir -p /run/php
+EXPOSE 9000
+USER root
 
 ENTRYPOINT ["/entrypoint.sh"]
 CMD ["/usr/bin/supervisord", "-n"]
