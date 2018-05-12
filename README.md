@@ -42,3 +42,7 @@ make run
 ~~~
 
 Note: You need to install `make` util.
+
+## TODO
+
+- Xdebug config
