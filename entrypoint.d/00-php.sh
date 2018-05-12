@@ -33,8 +33,4 @@ if [ "x${XDEBUG_REMOTE_HOST}" != "x" ]; then
 
 	phpenmod -v 7.1 xdebug
 
-	echo "PHP XDEBUG ENABLED";
-
 fi
-
-echo "PHP DONE";
