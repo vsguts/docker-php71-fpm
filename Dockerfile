@@ -93,6 +93,11 @@ RUN find /installers/ -type f -regex ".+sh" | xargs chmod +x
 RUN bash /installers/phantomjs.sh
 RUN bash /installers/wkhtmltox.sh
 
+# Install composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer && \
+    chmod +x /usr/local/bin/composer && \
+    composer --version --no-ansi
+
 COPY ./configs/supervisor /etc/supervisor
 COPY ./configs/logrotate.conf /etc/logrotate.conf
 COPY ./configs/php /etc/php/7.1
