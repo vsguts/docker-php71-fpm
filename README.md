@@ -31,14 +31,19 @@ Build repo:
 make build
 ~~~
 
+Run container:
+~~~
+make run
+~~~
+
 Push repo:
 ~~~
 make push
 ~~~
 
-Run container:
+Push repo with particular tag:
 ~~~
-make run
+make push IMAGE_TAG=latest
 ~~~
 
 Note: You need to install `make` util.
