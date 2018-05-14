@@ -55,16 +55,10 @@ Note: You need to install `make` util.
 
 ## Xdebug setup
 
-### Xdebug setup
+Set env var `XDEBUG_CONFIG` as follow:
 
-| Variable | Description |
-| --- | --- |
-| `XDEBUG_REMOTE_ENABLE=1` | Will enable Xdebug |
-| `XDEBUG_REMOTE_AUTO_START=1` | Enable autostart will catch all requests. If you want to start debug session manually pass variable `XDEBUG_SESSION_START` via `GET`, `POST` or `COOKIE` |
-| `XDEBUG_REMOTE_HOST=192.168.0.1` | Xdebug remote host
-| `XDEBUG_REMOTE_PORT=9000` | Will setup remote host |
+~~~
+XDEBUG_CONFIG=xdebug.remote_port = 9000;xdebug.remote_enable = 1;xdebug.remote_connect_back = 1;xdebug.remote_autostart = 1;xdebug.idekey = docker;
+~~~
 
-
-## TODO
-
-- Xdebug config
+Note: The `;` symbol will be replaced by `\n`.
