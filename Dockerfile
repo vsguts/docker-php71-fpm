@@ -117,8 +117,9 @@ RUN phpdismod -v 7.1 apcu_bc && \
     phpdismod -v 7.1 mongodb && \
     phpdismod -v 7.1 xdebug
 
-# PHP socket fix
+# PHP dirs fix
 RUN mkdir -p /run/php
+RUN mkdir -p /var/log/php
 
 COPY ./configs/supervisor /etc/supervisor
 COPY ./configs/logrotate.conf /etc/logrotate.conf
