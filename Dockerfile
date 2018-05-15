@@ -25,6 +25,7 @@ RUN apt-get -y update && apt-get install -y \
     mc \
     tmux \
     dnsutils \
+    inetutils-ping \
     jq \
     supervisor \
     cron \
