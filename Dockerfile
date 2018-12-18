@@ -93,7 +93,15 @@ RUN apt-get update -y && apt-get -o Dpkg::Options::="--force-confdef" -o Dpkg::O
 
 # Node dependencies
 RUN ln -s /usr/bin/nodejs /usr/bin/node && npm install -g \
-    less
+    less \
+    casperjs
+
+# Custom dependencies
+COPY ./installers /installers
+RUN find /installers/ -type f -regex ".+sh" | xargs chmod +x
+RUN bash /installers/goreplace.sh
+RUN bash /installers/phantomjs.sh
+RUN bash /installers/wkhtmltox.sh
 
 # Install composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer && \
