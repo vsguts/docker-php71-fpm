@@ -7,11 +7,7 @@ LABEL Name=php71-fpm
 ENV DEBIAN_FRONTEND=noninteractive \
     COMPOSER_HOME=/root/composer \
     PATH=/root/composer/vendor/bin:$PATH \
-    COMPOSER_ALLOW_SUPERUSER=1 \
-    XDEBUG_REMOTE_ENABLE=1 \
-    XDEBUG_REMOTE_AUTO_START=1 \
-    XDEBUG_REMOTE_PORT=9000 \
-    XDEBUG_REMOTE_HOST=""
+    COMPOSER_ALLOW_SUPERUSER=1
 
 # base packages
 RUN apt-get -y update && apt-get install -y \
@@ -97,15 +93,7 @@ RUN apt-get update -y && apt-get -o Dpkg::Options::="--force-confdef" -o Dpkg::O
 
 # Node dependencies
 RUN ln -s /usr/bin/nodejs /usr/bin/node && npm install -g \
-    less \
-    casperjs
-
-# Custom dependencies
-COPY ./installers /installers
-RUN find /installers/ -type f -regex ".+sh" | xargs chmod +x
-RUN bash /installers/goreplace.sh
-RUN bash /installers/phantomjs.sh
-RUN bash /installers/wkhtmltox.sh
+    less
 
 # Install composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer && \
