@@ -5,8 +5,7 @@ LABEL Name=php71-fpm
 
 # Defaultts variables
 ENV DEBIAN_FRONTEND=noninteractive \
-    COMPOSER_HOME=/root/composer \
-    PATH=/root/composer/vendor/bin:$PATH \
+    PATH=/root/.composer/vendor/bin:$PATH \
     COMPOSER_ALLOW_SUPERUSER=1
 
 # base packages

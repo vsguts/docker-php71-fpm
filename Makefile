@@ -1,5 +1,5 @@
 IMAGE_NAME  ?= vsguts/php71-fpm
-IMAGE_TAG   ?= 1.0.0
+IMAGE_TAG   ?= 1.1.0
 
 DEPEND_IMAGE = ubuntu:16.04
 
